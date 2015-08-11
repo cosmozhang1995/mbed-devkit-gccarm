@@ -1,6 +1,8 @@
 # Simple Mbed development platform
 This is a simple mbed development platform for Mac OSX / Linux, GCC-ARM. You can create mbed projects and manage the dependencies.
 This platform is written in Python 2.7.
+[See mbed handbook](https://developer.mbed.org/handbook/Homepage)
+[Try mbed online compiler](https://developer.mbed.org/compiler/)
 
 ## Install
 Make sure you have `gcc-arm` installed.
