@@ -60,7 +60,7 @@ if len(sys.argv) < 2:
     print "**Error**\n\tMust specify a project name."
     sys.exit();
 project_name = sys.argv[1]
-if (re.compile('[^a-zA-Z_]').search(project_name)):
+if (re.compile('[^a-zA-Z0-9_]').search(project_name)):
     print "**Error**\n\tProject name not valid."
     sys.exit();
 include_libs = []
