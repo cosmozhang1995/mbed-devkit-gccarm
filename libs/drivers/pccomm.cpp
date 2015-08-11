@@ -10,5 +10,6 @@ char *readline(Serial *serial) {
         if (ch == '\n') break;
         buffer[read_cnt++] = ch;
     }
+    buffer[read_cnt] = 0;
     return buffer;
 }
