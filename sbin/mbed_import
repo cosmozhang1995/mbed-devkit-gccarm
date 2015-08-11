@@ -1,0 +1,72 @@
+#!/usr/bin/python
+
+import sys, os, glob
+import getopt
+import re
+import json
+import mbed_util, config
+
+_mbed_path = config.mbed_path
+_mbed_libs_path = config.mbed_libs_path
+_mbed_rel_path = config.mbed_rel_path
+
+_help_text = """Include or remove a mbed lib dependence
+
+Usage:
+mbed_import [-u] <lib_name>|<lib_path>
+
+Arguments:
+
+<lib_name>|<lib_path>:
+    Include or remove a library. If library name (a string not containing '/' or '\\' is a library name) specified, the default libraries in ~/work/mbed/libs will be searched. Else the path will be used.
+    This option can be used for more than one time.
+
+-h: 
+    Show this help message
+
+-u:
+    If this is assigned, the specified library is removed. Else it is included.
+"""
+path = sys.argv[1]
+if path in ['-h']:
+    print _help_text
+    sys.exit()
+
+package_json_file = open("./package.json", 'r')
+package_info = json.loads(package_json_file.read())
+package_json_file.close()
+makefile_file = open("./Makefile", 'r')
+makefile_content = makefile_file.read()
+makefile_file.close()
+
+uninstall = False
+if path == "-u": 
+    uninstall = True
+    path = sys.argv[2]
+if (path.find('/') < 0) and (path.find('\\') < 0):
+    path = _mbed_libs_path + path
+path = os.path.realpath(path)
+
+if uninstall:
+    if path in package_info['libs']:
+        package_info['libs'].pop(package_info['libs'].index(path))
+else:
+    if not path in package_info['libs']:
+        package_info['libs'].append(path)
+
+(ext_i, ext_o) = mbed_util.parse_include_libs(package_info['libs'])
+makefile_content = re.compile('EXT_O = .*\n').sub('EXT_O = %s \n' % ' '.join(ext_o), makefile_content)
+makefile_content = re.compile('EXT_I = .*\n').sub('EXT_I = %s \n' % ' '.join(ext_i), makefile_content)
+
+makefile_file = open("./Makefile", 'w')
+makefile_file.write(makefile_content)
+makefile_file.close()
+package_json_file = open("./package.json", 'w')
+package_json_file.write(json.dumps(package_info))
+package_json_file.close()
+
+
+
+
+
+
