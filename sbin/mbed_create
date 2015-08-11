@@ -101,7 +101,7 @@ makefile_content = _tpl_makefile_ext \
     .replace("$(PROJECT)", project_name) \
     .replace("$(EXT_O)", " ".join(ext_o)) \
     .replace("$(EXT_I)", " ".join(ext_i)) \
-    .replace("$(GCC_BIN)", " ".join(config.gcc_bin))
+    .replace("$(GCC_BIN)", config.gcc_bin)
 
 makefile_tpl_file = open(mbed_path + '/makefile_tpl')
 makefile_content = makefile_content + makefile_tpl_file.read()

@@ -6,8 +6,8 @@ import json
 from shutil import copy
 import mbed_util, config
 
-disk = mbed_util['board_flash']
-serial_port = "/dev/tty.usbmodem1423"
+disk = config.board_flash
+serial_port = config.board_tty
 serial_baudrate = 9600
 
 opts, args = getopt.getopt(sys.argv[1:], "d:p:b:")
@@ -30,7 +30,8 @@ print "Downloading ..."
 copy("./%s.bin" % package_info['name'], disk)
 print "Download complete"
 print "Running...\n"
-if os.system('python /Users/zhangcosmo/work/python/comm.py %s %d' % (serial_port, serial_baudrate)): sys.exit()
+comm_py_path = os.path.realpath(config.mbed_path + "/sbin/comm.py")
+if os.system('python %s %s %d' % (comm_py_path, serial_port, serial_baudrate)): sys.exit()
 
 
 
