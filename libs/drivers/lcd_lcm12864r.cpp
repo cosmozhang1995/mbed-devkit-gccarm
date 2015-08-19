@@ -124,7 +124,6 @@ void LcdLCM12864R::turnDisplay(bool on) {
 }
 
 void LcdLCM12864R::startAt(int pos_x, int pos_y) {
-    printf("start at: %d, %d\n", pos_x, pos_y);
     if ((pos_x < 0) || (pos_x > 7)) return;
     if ((pos_y < 0) || (pos_y > 3)) return;
     int row_base_addr = 0;
@@ -154,9 +153,7 @@ void LcdLCM12864R::putChar(char ch) {
 void LcdLCM12864R::printString(char *str) {
     char ch;
     while ((!((this->_pos_y == 0) && (this->_pos_x == 0))) || (this->_clean)) {
-        printf("pos: x = %02d, y = %01d     ", this->_pos_x, this->_pos_y);
         ch = *(str++);
-        printf("0x%02x - %c\n", (int)ch, ch);
         if (this->_printing_word) {
             this->putChar(ch);
             this->_printing_word = false;
